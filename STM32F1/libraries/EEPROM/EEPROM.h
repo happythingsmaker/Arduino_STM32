@@ -6,10 +6,16 @@
 
 // HACK ALERT. This definition may not match your processor
 // To Do. Work out correct value for EEPROM_PAGE_SIZE on the STM32F103CT6 etc 
-#define MCU_STM32F103RB
+#define MCU_STM32F103C6
+//#define MCU_STM32F103C8
+// #define MCU_STM32F103RB
 
 #ifndef EEPROM_PAGE_SIZE
-	#if defined (MCU_STM32F103RB)
+	#if defined (MCU_STM32F103C6)
+		#define EEPROM_PAGE_SIZE	(uint16)0x200  /* Page size = 512Byte */
+	#elif defined (MCU_STM32F103C8)
+		#define EEPROM_PAGE_SIZE	(uint16)0x400  /* Page size = 1KByte */
+	#elif defined (MCU_STM32F103RB)
 		#define EEPROM_PAGE_SIZE	(uint16)0x400  /* Page size = 1KByte */
 	#elif defined (MCU_STM32F103ZE) || defined (MCU_STM32F103RE) || defined (MCU_STM32F103RD)
 		#define EEPROM_PAGE_SIZE	(uint16)0x800  /* Page size = 2KByte */
@@ -19,7 +25,11 @@
 #endif
 
 #ifndef EEPROM_START_ADDRESS
-	#if defined (MCU_STM32F103RB)
+	#if defined (MCU_STM32F103C6)
+		#define EEPROM_START_ADDRESS	((uint32)(0x8000000 + 32 * 1024 - 2 * EEPROM_PAGE_SIZE))	//flash size 32k
+	#elif defined (MCU_STM32F103C8)
+		#define EEPROM_START_ADDRESS	((uint32)(0x8000000 + 64 * 1024 - 2 * EEPROM_PAGE_SIZE))	//flash size 32k
+	#elif defined (MCU_STM32F103RB)
 		#define EEPROM_START_ADDRESS	((uint32)(0x8000000 + 128 * 1024 - 2 * EEPROM_PAGE_SIZE))
 	#elif defined (MCU_STM32F103ZE) || defined (MCU_STM32F103RE)
 		#define EEPROM_START_ADDRESS	((uint32)(0x8000000 + 512 * 1024 - 2 * EEPROM_PAGE_SIZE))
